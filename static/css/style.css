@@ -1,0 +1,41 @@
+/* Custom Modern Utility Styles Override for ProWear Solutions */
+:root {
+    --pw-primary: #0d6efd;
+    --pw-dark: #212529;
+    --pw-light: #f8f9fa;
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-column: column;
+}
+
+.hover-lift {
+    transition: var(--transition-smooth);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,0.175) !important;
+}
+
+/* Custom UI Layout Utilities */
+.hero-gradient {
+    background: linear-gradient(135deg, rgba(33,37,41,0.95) 0%, rgba(33,37,41,0.8) 100%);
+}
+
+.sticky-filter {
+    top: 90px;
+}
+
+.card-img-placeholder {
+    height: 220px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
