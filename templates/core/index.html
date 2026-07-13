@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5 mb-4 bg-dark text-white rounded-0 dynamic-hero-banner position-relative overflow-hidden" style="background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75));">
+    <div class="container py-5 text-center text-md-start my-auto">
+        <h1 class="display-4 fw-bold text-uppercase tracking-tight text-white mb-2">Elite Sportswear & Custom Branding Solutions</h1>
+        <p class="col-md-8 fs-5 text-light-50 mb-4">Unmatched craftsmanship in customized football jerseys, industrial safety gear, uniforms, and corporate promo wear. Built premium. Printed crisp.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a href="{{ url_for('core.products') }}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold shadow">Explore Inventory</a>
+            <a href="{{ url_for('core.contact') }}" class="btn btn-outline-light btn-lg px-4 shadow">Get Custom Quote</a>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h2 class="text-center fw-bold mb-4 text-uppercase tracking-wider">Featured Core Categories</h2>
+    <div class="row g-4 text-center">
+        {% for cat in ['Jerseys', 'Corporate Polo Shirts', 'Hoodies & Jackets', 'School Apparel'] %}
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 h-100 hover-lift">
+                <div class="card-body py-4">
+                    <div class="p-3 bg-light rounded-circle d-inline-block text-primary mb-3">
+                        <i class="fa-solid fa-tags fa-2xl"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark text-uppercase mb-0">{{ cat }}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
