@@ -1,17 +1,20 @@
-services:
-  - type: web
-    name: joytech-solutions-app
-    env: python
-    buildCommand: "pip install -r requirements.txt && flask db upgrade"
-    startCommand: "gunicorn app:app"
-    envVars:
-      - key: FLASK_APP
-        value: app.py
-      - key: FLASK_ENV
-        value: production
-      - key: SECRET_KEY
-        generateValue: true
-      - key: DATABASE_URL
-        fromDatabase:
-          name: joytech-neon-db
-          property: connectionString
+{
+  "name": "prowear-solutions",
+  "version": "1.0.0",
+  "description": "Production Ready Sportswear and Clothing Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'No specialized compilation required for flat asset mapping'"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "pg": "^8.13.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
