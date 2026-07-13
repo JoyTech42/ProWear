@@ -1,31 +1,63 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="p-5 mb-4 bg-dark text-white rounded-0 dynamic-hero-banner position-relative overflow-hidden" style="background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75));">
-    <div class="container py-5 text-center text-md-start my-auto">
-        <h1 class="display-4 fw-bold text-uppercase tracking-tight text-white mb-2">Elite Sportswear & Custom Branding Solutions</h1>
-        <p class="col-md-8 fs-5 text-light-50 mb-4">Unmatched craftsmanship in customized football jerseys, industrial safety gear, uniforms, and corporate promo wear. Built premium. Printed crisp.</p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="{{ url_for('core.products') }}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold shadow">Explore Inventory</a>
-            <a href="{{ url_for('core.contact') }}" class="btn btn-outline-light btn-lg px-4 shadow">Get Custom Quote</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProWear Solutions | Elite Apparel & Custom Branding</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/"><i class="fa-solid fa-shirt me-2 text-primary"></i>ProWear Solutions</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white me-3" href="/">Home</a>
+                <a class="nav-link text-white me-3" href="/products">Products</a>
+                <a class="nav-link text-white" href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-5 bg-dark text-white rounded-0 position-relative" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7));">
+        <div class="container py-5">
+            <h1 class="display-4 fw-bold text-uppercase tracking-tight">Premium Sportswear & Custom Apparel Solutions</h1>
+            <p class="col-md-8 fs-5 text-light-50 mb-4">Unmatched craftsmanship in customized football jerseys, basketball kits, uniforms, and corporate promo wear. Built premium. Printed crisp.</p>
+            <a href="/products" class="btn btn-primary btn-lg px-4 shadow">Explore Catalog</a>
         </div>
     </div>
-</div>
 
-<div class="container my-5">
-    <h2 class="text-center fw-bold mb-4 text-uppercase tracking-wider">Featured Core Categories</h2>
-    <div class="row g-4 text-center">
-        {% for cat in ['Jerseys', 'Corporate Polo Shirts', 'Hoodies & Jackets', 'School Apparel'] %}
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm rounded-3 h-100 hover-lift">
-                <div class="card-body py-4">
-                    <div class="p-3 bg-light rounded-circle d-inline-block text-primary mb-3">
-                        <i class="fa-solid fa-tags fa-2xl"></i>
-                    </div>
-                    <h6 class="fw-bold text-dark text-uppercase mb-0">{{ cat }}</h6>
+    <div class="container my-5">
+        <h2 class="text-center fw-bold mb-5 text-uppercase">Branding Capabilities</h2>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-4 h-100">
+                    <i class="fa-solid fa-scissors text-primary fa-3x mb-3"></i>
+                    <h5 class="fw-bold">Premium Embroidery</h5>
+                    <p class="text-muted small">High-density custom stiching patterns built to outlast intense match days.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-4 h-100">
+                    <i class="fa-solid fa-palette text-primary fa-3x mb-3"></i>
+                    <h5 class="fw-bold">Sublimation Printing</h5>
+                    <p class="text-muted small">Deep ink integration providing vivid jerseys with zero fading or peeling over time.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-4 h-100">
+                    <i class="fa-solid fa-layer-group text-primary fa-3x mb-3"></i>
+                    <h5 class="fw-bold">Screen Printing</h5>
+                    <p class="text-muted small">Optimal structural application layouts built explicitly for volume bulk scaling.</p>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-</div>
-{% endblock %}
+
+    <footer class="bg-dark text-white text-center py-4 mt-5 border-top border-secondary">
+        <p class="small text-muted mb-0">© 2026 <strong>ProWear Solutions</strong>. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
