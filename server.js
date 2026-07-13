@@ -8,35 +8,46 @@ const helmet = require('helmet');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Security Hardening Middleware
+// ==============================================================================
+// 1. Security & Parsing Middlewares
+// ==============================================================================
 app.use(helmet({
-    contentSecurityPolicy: false // Allows Bootstrap CDNs to render directly
+    contentSecurityPolicy: false // Allows Bootstrap and FontAwesome CDNs to load seamlessly
 }));
 
-// Parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session Setup
+// Session Setup for User/Staff Authentication
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'fallback-local-secret-key-2026',
+    secret: process.env.SESSION_SECRET || 'prowear-solutions-secret-2026',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: process.env.NODE_ENV === 'production', httpOnly: true }
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production', 
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 14 // 14 Days cookie lifecycle
+    }
 }));
 
-// Neon Cloud PostgreSQL Connection Pool
+// ==============================================================================
+// 2. Static Asset Pipeline & Folder Routing (FIXED)
+// ==============================================================================
+// Serves static files directly from the root-level 'static' folder.
+// This allows URLs like /css/style.css and /js/main.js to resolve perfectly.
+app.use(express.static(path.join(__dirname, 'static')));
+
+// ==============================================================================
+// 3. Neon Cloud PostgreSQL Connection Pool
+// ==============================================================================
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-        rejectUnauthorized: true // Enforces strictly encrypted Neon SSL routes
+        rejectUnauthorized: true // Enforces production-grade encrypted Neon SSL channels
     }
 });
 
-// Static Asset Pipeline Routing
-app.use('/static', express.static(path.join(__dirname, 'static')));
-
-// Database Table Seeding Logic for Neon Console Execution
+// Database Table Instantiation Logic
 async function seedDatabaseSchema() {
     try {
         await pool.query(`
@@ -65,41 +76,47 @@ async function seedDatabaseSchema() {
         `);
         console.log("Database schema validated successfully on Neon Cluster.");
     } catch (err) {
-        console.error("Critical error building schemas on the cloud instance:", err);
+        console.error("Critical error building schemas on Neon instance:", err);
     }
 }
 seedDatabaseSchema();
 
-// --- BUSINESS LOGIC API ENDPOINTS ---
+// ==============================================================================
+// 4. API Endpoints (Business Logic)
+// ==============================================================================
 
-// Fetch Catalog Products
+// Fetch Catalog Products with Optional Filters
 app.get('/api/products', async (req, res) => {
     try {
         const { category, search } = req.query;
         let query = 'SELECT * FROM products';
         let params = [];
+        let conditions = [];
         
-        if (category || search) {
-            query += ' WHERE ';
-            if (category) {
-                query += 'category = $1';
-                params.push(category);
-            }
-            if (search) {
-                if (category) query += ' AND ';
-                query += `name ILIKE $${params.length + 1}`;
-                params.push(`%${search}%`);
-            }
+        if (category) {
+            conditions.push(`category = $${params.length + 1}`);
+            params.push(category);
         }
+        if (search) {
+            conditions.push(`name ILIKE $${params.length + 1}`);
+            params.push(`%${search}%`);
+        }
+        
+        if (conditions.length > 0) {
+            query += ' WHERE ' + conditions.join(' AND ');
+        }
+        
+        query += ' ORDER BY id DESC';
         
         const result = await pool.query(query, params);
         res.json(result.rows);
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to query catalog.' });
     }
 });
 
-// Process Incoming Contact Inquiries
+// Process Incoming B2B Contact Inquiries & Custom Branding Requests
 app.post('/api/contact', async (req, res) => {
     const { name, email, message } = req.body;
     if (!name || !email || !message) {
@@ -112,21 +129,33 @@ app.post('/api/contact', async (req, res) => {
         );
         res.status(200).json({ success: 'Inquiry cataloged successfully!' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Database storage execution failed.' });
     }
 });
 
-// --- CORE TEMPLATE ROUTING OVERLAYS ---
+// ==============================================================================
+// 5. Explicit HTML Layout Routing
+// ==============================================================================
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'templates/core/index.html')));
 app.get('/products', (req, res) => res.sendFile(path.join(__dirname, 'templates/core/products.html')));
 app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'templates/core/contact.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'templates/auth/login.html')));
 
-// Custom Fallback Catch-All Error Route Handling
+// Custom 404 Catch-All Routing Exception Middleware
 app.use((req, res) => {
-    res.status(404).send('<h1>404 Not Found</h1><p>The page requested could not be tracked.</p>');
+    res.status(404).send(`
+        <div style="text-align: center; padding: 50px; font-family: sans-serif;">
+            <h1 style="font-size: 3rem; color: #dc3545;">404 Not Found</h1>
+            <p style="color: #6c757d;">The page requested could not be tracked.</p>
+            <a href="/" style="color: #0d6efd; text-decoration: none; font-weight: bold;">Return to Storefront</a>
+        </div>
+    `);
 });
 
+// ==============================================================================
+// 6. Server Initialization
+// ==============================================================================
 app.listen(PORT, () => {
-    console.log(`Server actively running on interface port: ${PORT}`);
+    console.log(`Server is actively running on interface port: ${PORT}`);
 });
